@@ -75,13 +75,24 @@ export async function init(pageElement) {
                     </form>
                 `,
                 onSave: async () => {
-                    const form = document.getElementById('assignment-form');
-                    const formData = new FormData(form);
-                    const assignmentData = Object.fromEntries(formData.entries());
+                    // Get form values directly to ensure proper validation
+                    const retailerId = document.getElementById('retailer_id').value;
+                    const productId = document.getElementById('product_id').value;
+                    const sku = document.getElementById('sku').value;
+                    const unitCost = document.getElementById('unit_cost').value;
+                    
+                    // Validate required fields
+                    if (!retailerId) throw new Error('Please select a retailer');
+                    if (!productId) throw new Error('Please select a product');
+                    if (!sku) throw new Error('Please enter a SKU');
+                    if (!unitCost || unitCost <= 0) throw new Error('Please enter a valid unit cost');
                     
                     try {
                         const newAssignment = await DatabaseService.createProductAssignment({
-                            ...assignmentData,
+                            retailer_id: retailerId,
+                            product_id: productId,
+                            sku: sku,
+                            unit_cost: parseFloat(unitCost),
                             status: 'pending'
                         });
                         
@@ -93,7 +104,8 @@ export async function init(pageElement) {
                         table.addRow(fullAssignment);
                         window.toast.success('Product assigned successfully');
                     } catch (error) {
-                        window.toast.error('Failed to assign product');
+                        // Show more specific error message
+                        window.toast.error(error.message || 'Failed to assign product');
                         throw error;
                     }
                 }
