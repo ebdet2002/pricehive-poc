@@ -1,7 +1,7 @@
 import { DataTable } from '../components/table.js';
 import { DatabaseService } from '../database.js';
 import { formatCurrency, formatPackageSize, formatDate } from '../utils.js';
-import { supabase, CATEGORIES, PACKAGE_UNITS, PACKAGE_TYPES } from '../config.js';
+import { supabase, PACKAGE_UNITS, PACKAGE_TYPES } from '../config.js';
 
 export async function init(pageElement) {
     const columns = [
