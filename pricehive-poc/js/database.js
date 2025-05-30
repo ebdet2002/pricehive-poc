@@ -1,3 +1,5 @@
+import { supabase } from './config.js';
+
 // Database operations
 export class DatabaseService {
     // Product operations
