@@ -1,8 +1,10 @@
+import { createClient } from '@supabase/supabase-js';
+
 // Supabase configuration
 const SUPABASE_URL = 'your-supabase-url';
 const SUPABASE_ANON_KEY = 'your-anon-key';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // App constants
 const CATEGORIES = [
@@ -22,3 +24,12 @@ const REJECTION_REASONS = [
     'Incorrect value', 'Price change not authorized', 
     'Discount not authorized', 'Product not authorized'
 ];
+
+export {
+    supabase,
+    CATEGORIES,
+    PACKAGE_UNITS,
+    PACKAGE_TYPES,
+    DISCOUNT_CATEGORIES,
+    REJECTION_REASONS
+};
