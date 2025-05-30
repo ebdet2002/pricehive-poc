@@ -1,5 +1,5 @@
 // Toast notification component for PriceHive
-class Toast {
+export class Toast {
     constructor() {
         this.container = document.getElementById('toast-container');
         this.toasts = [];

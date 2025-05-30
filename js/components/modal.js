@@ -1,5 +1,5 @@
 // Modal component for PriceHive
-class Modal {
+export class Modal {
     constructor() {
         this.modalContainer = document.getElementById('modal-container');
         this.activeModal = null;
