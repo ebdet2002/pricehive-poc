@@ -1,6 +1,15 @@
 import { supabase } from './config.js';
 
 // Database operations
+    static async getCategories() {
+        const { data, error } = await supabase
+            .from('categories')
+            .select('*')
+            .order('name');
+        if (error) throw error;
+        return data;
+    }
+
 export class DatabaseService {
     // Product operations
     static async getProducts(manufacturerId = null) {

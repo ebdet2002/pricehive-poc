@@ -41,7 +41,10 @@ export async function init(pageElement) {
 
     try {
         // Fetch and display products
-        const products = await DatabaseService.getProducts();
+        const [products, categories] = await Promise.all([
+            DatabaseService.getProducts(),
+            DatabaseService.getCategories()
+        ]);
         const table = new DataTable('product-table', columns, products);
 
         // Add product button handler
@@ -61,7 +64,8 @@ export async function init(pageElement) {
                         <div class="form-group">
                             <label for="category">Category</label>
                             <select id="category" required>
-                                ${CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                                <option value="">Select Category</option>
+                                ${categories.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('')}
                             </select>
                         </div>
                         <div class="form-row">
@@ -102,7 +106,7 @@ export async function init(pageElement) {
                     // Get form values directly to ensure proper validation
                     const name = document.getElementById('product_name').value;
                     const brand = document.getElementById('brand').value;
-                    const category = document.getElementById('category').value;
+                    const categoryId = document.getElementById('category').value;
                     const packageSizeQuantity = document.getElementById('package_size_quantity').value;
                     const packageSizeUnit = document.getElementById('package_size_unit').value;
                     const packageSizePackaging = document.getElementById('package_size_packaging').value;
@@ -113,7 +117,7 @@ export async function init(pageElement) {
                     // Validate required fields
                     if (!name) throw new Error('Please enter a product name');
                     if (!brand) throw new Error('Please enter a brand');
-                    if (!category) throw new Error('Please select a category');
+                    if (!categoryId) throw new Error('Please select a category');
                     if (!packageSizeQuantity || packageSizeQuantity <= 0) throw new Error('Please enter a valid package size quantity');
                     if (!packageSizeUnit) throw new Error('Please select a package size unit');
                     if (!packageSizePackaging) throw new Error('Please select a package type');
@@ -137,7 +141,7 @@ export async function init(pageElement) {
                         const newProduct = await DatabaseService.createProduct({
                             name,
                             brand,
-                            category,
+                            category_id: categoryId,
                             package_size_quantity: parseFloat(packageSizeQuantity),
                             package_size_unit: packageSizeUnit,
                             package_size_packaging: packageSizePackaging,

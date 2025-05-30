@@ -6,13 +6,6 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// App constants
-const CATEGORIES = [
-    'Dairy', 'Dairy Alternatives', 'Sparkling Water', 'Coffee',
-    'Coffee Alternative', 'Energy Drinks', 'Soft Drink', 'Sports Drink',
-    'Juice', 'Sweet Snacks', 'Salt Snacks', 'Frozen Goods', 'Frozen Dairy'
-];
-
 const PACKAGE_UNITS = ['oz', 'ml', 'l', 'g', 'kg', 'lb'];
 const PACKAGE_TYPES = ['Can', 'Bottle', 'Box', 'Bag', 'Pouch', 'Jar'];
 
@@ -27,7 +20,6 @@ const REJECTION_REASONS = [
 
 export {
     supabase,
-    CATEGORIES,
     PACKAGE_UNITS,
     PACKAGE_TYPES,
     DISCOUNT_CATEGORIES,
