@@ -1,5 +1,5 @@
 // Database operations
-class DatabaseService {
+export class DatabaseService {
     // Product operations
     static async getProducts(manufacturerId = null) {
         let query = supabase.from('products').select('*');
