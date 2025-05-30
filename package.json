@@ -2,7 +2,7 @@
   "description": "PriceHive Proof of Concept - Price Management Platform",
   "main": "index.html",
   "scripts": {
-    "dev": "vite pricehive-poc",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
