@@ -1,0 +1,13 @@
+{
+  "name": "pricehive-poc",
+  "version": "1.0.0",
+  "description": "PriceHive Proof of Concept - Price Management Platform",
+  "main": "index.html",
+  "scripts": {
+    "serve": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": ["pricing", "manufacturer", "retailer", "poc"],
+  "author": "",
+  "license": "MIT"
+}
