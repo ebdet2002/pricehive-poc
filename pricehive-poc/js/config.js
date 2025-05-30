@@ -7,7 +7,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const PACKAGE_UNITS = ['oz', 'ml', 'l', 'g', 'kg', 'lb'];
-const PACKAGE_TYPES = ['Can', 'Bottle', 'Box', 'Bag', 'Pouch', 'Jar'];
+const PACKAGE_TYPES = ['can', 'bottle', 'box', 'bag', 'pouch', 'jar'];
 
 const DISCOUNT_CATEGORIES = [
     'Temporary Price Reduction', 'Seasonal Sale', 'Feature Sale', 'Display Sale'
