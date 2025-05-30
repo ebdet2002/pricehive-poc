@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PriceHive - Manufacturer Dashboard</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/manufacturer.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>PriceHive</h2>
+                <p>Demo Manufacturer</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#catalog" class="nav-link active" data-page="catalog">Product Catalog</a></li>
+                <li><a href="#retailer-mgmt" class="nav-link" data-page="retailer-mgmt">Retailer Management</a></li>
+                <li><a href="#approvals" class="nav-link" data-page="approvals">Approvals</a></li>
+                <li class="nav-bottom"><a href="index.html">Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="main-content">
+            <div id="catalog-page" class="page active"><!-- Product Catalog Content --></div>
+            <div id="retailer-mgmt-page" class="page"><!-- Retailer Management Content --></div>
+            <div id="approvals-page" class="page"><!-- Approvals Content --></div>
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/components/table.js"></script>
+    <script src="js/components/toast.js"></script>
+    <script src="js/manufacturer/catalog.js"></script>
+    <script src="js/manufacturer/retailer-mgmt.js"></script>
+    <script src="js/manufacturer/approvals.js"></script>
+    <script>
+        // Initialize manufacturer dashboard
+        document.addEventListener('DOMContentLoaded', initManufacturerDashboard);
+    </script>
+</body>
+</html>
