@@ -1,7 +1,7 @@
 import { DataTable } from '../components/table.js';
 import { DatabaseService } from '../database.js';
 import { formatCurrency, formatPackageSize, formatDate } from '../utils.js';
-import { CATEGORIES, PACKAGE_UNITS, PACKAGE_TYPES } from '../config.js';
+import { supabase, CATEGORIES, PACKAGE_UNITS, PACKAGE_TYPES } from '../config.js';
 
 export async function init(pageElement) {
     const columns = [
@@ -99,16 +99,59 @@ export async function init(pageElement) {
                     </form>
                 `,
                 onSave: async () => {
-                    const form = document.getElementById('product-form');
-                    const formData = new FormData(form);
-                    const productData = Object.fromEntries(formData.entries());
+                    // Get form values directly to ensure proper validation
+                    const name = document.getElementById('product_name').value;
+                    const brand = document.getElementById('brand').value;
+                    const category = document.getElementById('category').value;
+                    const packageSizeQuantity = document.getElementById('package_size_quantity').value;
+                    const packageSizeUnit = document.getElementById('package_size_unit').value;
+                    const packageSizePackaging = document.getElementById('package_size_packaging').value;
+                    const caseQuantity = document.getElementById('case_quantity').value;
+                    const defaultPrice = document.getElementById('default_price').value;
+                    const upc = document.getElementById('upc').value;
+                    
+                    // Validate required fields
+                    if (!name) throw new Error('Please enter a product name');
+                    if (!brand) throw new Error('Please enter a brand');
+                    if (!category) throw new Error('Please select a category');
+                    if (!packageSizeQuantity || packageSizeQuantity <= 0) throw new Error('Please enter a valid package size quantity');
+                    if (!packageSizeUnit) throw new Error('Please select a package size unit');
+                    if (!packageSizePackaging) throw new Error('Please select a package type');
+                    if (!caseQuantity || caseQuantity <= 0) throw new Error('Please enter a valid case quantity');
+                    if (!defaultPrice || defaultPrice <= 0) throw new Error('Please enter a valid default price');
+                    if (!upc || !/^\d{12}$/.test(upc)) throw new Error('Please enter a valid 12-digit UPC');
+                    
+                    // Get the current user's organization (manufacturer) ID
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user) throw new Error('User not authenticated');
+                    
+                    const { data: userProfile } = await supabase
+                        .from('user_profiles')
+                        .select('organization_id')
+                        .eq('id', user.id)
+                        .single();
+                    
+                    if (!userProfile?.organization_id) throw new Error('User organization not found');
                     
                     try {
-                        const newProduct = await DatabaseService.createProduct(productData);
+                        const newProduct = await DatabaseService.createProduct({
+                            name,
+                            brand,
+                            category,
+                            package_size_quantity: parseFloat(packageSizeQuantity),
+                            package_size_unit: packageSizeUnit,
+                            package_size_packaging: packageSizePackaging,
+                            case_quantity: parseInt(caseQuantity),
+                            default_price: parseFloat(defaultPrice),
+                            upc,
+                            manufacturer_id: userProfile.organization_id,
+                            status: 'active'
+                        });
+                        
                         table.addRow(newProduct);
                         window.toast.success('Product added successfully');
                     } catch (error) {
-                        window.toast.error('Failed to add product');
+                        window.toast.error(error.message || 'Failed to add product');
                         throw error;
                     }
                 }
