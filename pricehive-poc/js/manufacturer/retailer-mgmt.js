@@ -95,10 +95,6 @@ export async function init(pageElement) {
                     const selectedProduct = products.find(p => p.id === productId);
                     if (!selectedProduct) throw new Error('Selected product not found');
                     
-                    // Get the selected product to get its manufacturer_id
-                    const selectedProduct = products.find(p => p.id === productId);
-                    if (!selectedProduct) throw new Error('Selected product not found');
-                    
                     // Validate required fields
                     if (!retailerId) throw new Error('Please select a retailer');
                     if (!productId) throw new Error('Please select a product');
@@ -109,7 +105,6 @@ export async function init(pageElement) {
                         const newAssignment = await DatabaseService.createProductAssignment({
                             retailer_id: retailerId,
                             product_id: productId,
-                            manufacturer_id: selectedProduct.manufacturer_id,
                             manufacturer_id: selectedProduct.manufacturer_id,
                             sku: sku,
                             unit_cost: parseFloat(unitCost),
