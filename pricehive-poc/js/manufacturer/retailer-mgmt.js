@@ -30,8 +30,17 @@ export async function init(pageElement) {
     pageElement.appendChild(container);
 
     try {
-        // Fetch product assignments
-        const assignments = await DatabaseService.getProductAssignments();
+        // Get current user's organization (manufacturer) ID
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+        
+        const userProfile = await DatabaseService.getUserProfile(user.id);
+        if (!userProfile?.organization_id) throw new Error('User organization not found');
+        
+        // Fetch product assignments for this manufacturer
+        const assignments = await DatabaseService.getProductAssignments({
+            manufacturerId: userProfile.organization_id
+        });
         const table = new DataTable('assignments-table', columns, assignments);
 
         // Handle new assignment
@@ -39,7 +48,7 @@ export async function init(pageElement) {
             // Fetch retailers and products for the form
             const [retailers, products] = await Promise.all([
                 DatabaseService.getOrganizations('retailer'),
-                DatabaseService.getProducts()
+                DatabaseService.getProducts(userProfile.organization_id)
             ]);
 
             window.modal.create({
@@ -81,6 +90,10 @@ export async function init(pageElement) {
                     const sku = document.getElementById('sku').value;
                     const unitCost = document.getElementById('unit_cost').value;
                     
+                    // Get the selected product to get its manufacturer_id
+                    const selectedProduct = products.find(p => p.id === productId);
+                    if (!selectedProduct) throw new Error('Selected product not found');
+                    
                     // Validate required fields
                     if (!retailerId) throw new Error('Please select a retailer');
                     if (!productId) throw new Error('Please select a product');
@@ -91,6 +104,7 @@ export async function init(pageElement) {
                         const newAssignment = await DatabaseService.createProductAssignment({
                             retailer_id: retailerId,
                             product_id: productId,
+                            manufacturer_id: selectedProduct.manufacturer_id,
                             sku: sku,
                             unit_cost: parseFloat(unitCost),
                             status: 'pending'

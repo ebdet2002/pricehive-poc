@@ -13,7 +13,10 @@ export class DatabaseService {
 
     // Product operations
     static async getProducts(manufacturerId = null) {
-        let query = supabase.from('products').select('*');
+        let query = supabase.from('products').select(`
+            *,
+            category:categories(*)
+        `);
         if (manufacturerId) {
             query = query.eq('manufacturer_id', manufacturerId);
         }
@@ -26,7 +29,10 @@ export class DatabaseService {
         const { data, error } = await supabase
             .from('products')
             .insert([productData])
-            .select();
+            .select(`
+                *,
+                category:categories(*)
+            `);
         if (error) throw error;
         return data[0];
     }
@@ -82,7 +88,12 @@ export class DatabaseService {
         const { data, error } = await supabase
             .from('product_assignments')
             .insert([assignmentData])
-            .select();
+            .select(`
+                *,
+                product:products(*),
+                retailer:organizations!retailer_id(*),
+                manufacturer:organizations!manufacturer_id(*)
+            `);
         if (error) throw error;
         return data[0];
     }

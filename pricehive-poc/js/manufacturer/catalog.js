@@ -5,9 +5,10 @@ import { supabase, PACKAGE_UNITS, PACKAGE_TYPES } from '../config.js';
 
 export async function init(pageElement) {
     const columns = [
-        { key: 'product_name', label: 'Product Name' },
+        { key: 'name', label: 'Product Name' },
         { key: 'brand', label: 'Brand' },
-        { key: 'category', label: 'Category' },
+        { key: 'category', label: 'Category',
+          format: (_, row) => row.category?.name || 'N/A' },
         { key: 'package_info', label: 'Package', 
           format: (_, row) => formatPackageSize(
             row.package_size_quantity, 
@@ -138,7 +139,7 @@ export async function init(pageElement) {
                     if (!userProfile?.organization_id) throw new Error('User organization not found');
                     
                     try {
-                        const newProduct = await DatabaseService.createProduct({
+                        const productData = {
                             name,
                             brand,
                             category_id: categoryId,
@@ -149,8 +150,11 @@ export async function init(pageElement) {
                             default_price: parseFloat(defaultPrice),
                             upc,
                             manufacturer_id: userProfile.organization_id,
+                            manufacturer_id: userProfile.organization_id,
                             status: 'active'
-                        });
+                        };
+                        
+                        const newProduct = await DatabaseService.createProduct(productData);
                         
                         table.addRow(newProduct);
                         window.toast.success('Product added successfully');
