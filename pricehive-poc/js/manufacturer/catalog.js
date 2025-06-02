@@ -150,7 +150,6 @@ export async function init(pageElement) {
                             default_price: parseFloat(defaultPrice),
                             upc,
                             manufacturer_id: userProfile.organization_id,
-                            manufacturer_id: userProfile.organization_id,
                             status: 'active'
                         };
                         
