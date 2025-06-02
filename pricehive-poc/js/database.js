@@ -147,10 +147,20 @@ export class DatabaseService {
     static async updatePriceChangeStatus(id, status, rejectionReason = null) {
         const updates = { 
             status, 
-            processed_at: new Date().toISOString() 
+            processed_at: new Date().toISOString(),
+            reviewed_at: new Date().toISOString()
         };
         if (rejectionReason) {
             updates.rejection_reason = rejectionReason;
+        }
+        
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+        
+        // Add reviewed_by for approved/rejected status
+        if (status === 'approved' || status === 'rejected') {
+            updates.reviewed_by = user.id;
         }
         
         const { data, error } = await supabase
@@ -205,10 +215,20 @@ export class DatabaseService {
     static async updateDiscountStatus(id, status, rejectionReason = null) {
         const updates = {
             status,
-            reviewed_at: new Date().toISOString()
+            reviewed_at: new Date().toISOString(),
+            processed_at: new Date().toISOString()
         };
         if (rejectionReason) {
             updates.rejection_reason = rejectionReason;
+        }
+
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+        
+        // Add reviewed_by for approved/rejected status
+        if (status === 'approved' || status === 'rejected') {
+            updates.reviewed_by = user.id;
         }
 
         const { data, error } = await supabase
