@@ -175,6 +175,15 @@ body {
     overflow-y: auto;
 }
 
+/* Page visibility */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
 /* Tables */
 .data-table {
     width: 100%;
