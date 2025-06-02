@@ -6,9 +6,9 @@ import { REJECTION_REASONS } from '../config.js';
 export async function init(pageElement) {
     const columns = [
         { key: 'retailer', label: 'Retailer',
-          format: (_, row) => row.product_assignment.retailer.name },
+          format: (_, row) => row.product_assignment?.retailer?.name || 'N/A' },
         { key: 'product', label: 'Product',
-          format: (_, row) => row.product_assignment.product.name },
+          format: (_, row) => row.product_assignment?.product?.name || 'N/A' },
         { key: 'type', label: 'Type',
           format: (_, row) => row.hasOwnProperty('new_price') ? 'Price Change' : 'Discount' },
         { key: 'details', label: 'Details',

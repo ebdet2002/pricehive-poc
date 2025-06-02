@@ -7,7 +7,7 @@ export async function init(pageElement) {
         { key: 'product_name', label: 'Product',
           format: (_, row) => row.product.name },
         { key: 'manufacturer', label: 'Manufacturer',
-          format: (_, row) => row.manufacturer.name },
+          format: (_, row) => row.manufacturer?.name || 'N/A' },
         { key: 'package_info', label: 'Package',
           format: (_, row) => formatPackageSize(
               row.product.package_size_quantity,

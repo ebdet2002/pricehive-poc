@@ -5,9 +5,9 @@ import { formatCurrency, formatDate } from '../utils.js';
 export async function init(pageElement) {
     const columns = [
         { key: 'retailer_name', label: 'Retailer', 
-          format: (_, row) => row.retailer.name },
+          format: (_, row) => row.retailer?.name || 'N/A' },
         { key: 'product_name', label: 'Product', 
-          format: (_, row) => row.product.name },
+          format: (_, row) => row.product?.name || 'N/A' },
         { key: 'sku', label: 'SKU' },
         { key: 'unit_cost', label: 'Unit Cost', 
           format: (value) => formatCurrency(value) },
